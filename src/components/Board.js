@@ -1,15 +1,32 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 
 import EndDevice from "./EndDevice.js"
-import { ItemTypes } from './ItemTypes'
+import { ItemTypes, DevicesList } from './Constants'
+
+import "../styles/drawingArea.css"
 
 
-function Board() {
-    const [board, setBoard] = useState([
+function Board(props) {
+    const devices = DevicesList
 
-    ])
+    const [board, setBoard] = useState([])
+    
+    const isJSON = (text) => {
+        try {
+            const json = JSON.parse(text);
+            return true
+        } catch (e) {
+            return false
+        }
+    }
+
+    useEffect(() => {
+        if (isJSON(props.network)) {
+            console.log(typeof JSON.parse(props.network) )
+            setBoard(JSON.parse(props.network).componentes)
+        }
+    })
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.ENDDEVICE,
@@ -19,61 +36,30 @@ function Board() {
         })
     }))
 
-    const devices = [
-        {
-            "id": 1,
-            "type":"end-device",
-            "name":"pc-da-nasa",
-            "network": {
-                "ip":"111.111.111.111",
-                "mask":"222.222.222.222",
-                "isDHCP": true, 
-                "gateway":"333.333.333.333",
-                "dnsServer":""
-            },
-            "interface": "FAST_ETHERNET"
-        },
-        {
-            "id": 2,
-            "type":"end-device",
-            "name":"pc-da-nasa2",
-            "network": {
-                "ip":"111.111.111.111",
-                "mask":"222.222.222.222",
-                "isDHCP": true, 
-                "gateway":"333.333.333.333",
-                "dnsServer":""
-            },
-            "interface": "FAST_ETHERNET"
-        }
-    ]
-
     const addDevice = (id) => {
-        console.log(id)
-        const devList = devices.filter( (dev) => id === dev.id);
-        setBoard( (board) => [...board, devList[0]])
+        const devList = devices.filter((dev) => id === dev.id);
+        setBoard((board) => [...board, devList[0]])
     }
+    
     return (
-        <div className='board' >
-            <div style={{
-                backgroundColor: "red"
-            }}>
-                {devices.map( (dev) => {
-                    return <EndDevice name={dev.name} id={dev.id} />
-                })}
-
+        <>
+            <div className='devicesBar'>
+                {
+                    devices.map((dev) => {
+                        return <EndDevice name={dev.name} id={dev.id} />
+                    })
+                }
             </div>
 
-            <div ref={drop} style={{
-                width: "100%",
-                height: "100%"
-            }}>
-                {board.map((dev) => {
-                    return <EndDevice name={dev.name} id={dev.id} /> 
-                })}
+            <div ref={drop} className='board'>
+                {
+                    board.map((dev) => {
+                        return <EndDevice name={dev.name} id={dev.id} />
+                    })
+                }
             </div>
 
-        </div>
+        </>
 
     );
 }

@@ -17,8 +17,8 @@ function DrawingArea(props) {
                 <a href="/home">ação do quadro 3</a>
                 <a href="/home">ação do quadro 4</a>
             </div>
-            <DndProvider backend={HTML5Backend} className="board">
-                <Board />
+            <DndProvider backend={HTML5Backend}>
+                <Board network={props.network}/>
             </DndProvider>
         </div >
     );

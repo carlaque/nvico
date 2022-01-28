@@ -1,7 +1,7 @@
 import React from 'react';
 import EndDeviceImagem from "../assets/endDevice.svg"
 import { useDrag } from 'react-dnd'
-import { ItemTypes } from './ItemTypes'
+import { ItemTypes } from './Constants'
 
 
 export default function EndDevice(props) {
@@ -19,23 +19,17 @@ export default function EndDevice(props) {
     )
     return (
         <div
+            className='device'
             ref={drag}
             style={{
                 opacity: isDragging ? 0.5 : 1,
-                border: isDragging ? "5px solid pink" : "0px",
+                // background: "transparent",
                 cursor: 'move',
                 width: "10vw",
             }} >
-            {/* <EndDeviceImagem /> */}
             <img src={EndDeviceImagem} alt="" />
             <p>{props.name}</p>
-            {/* <p>{props.ip}</p> */}
-            {/*<p>{props.mask}</p>
-            <p>{props.isDHCP}</p>
-            <p>{props.gateway}</p>
-            <p>{props.dns}</p>
-            <p>{props.interface}</p> */}
-            {/* todo: adicionar STATUS da coneção e conexoes */}
+            {/* TODO: adicionar STATUS da coneXão e conexoes */}
         </div>
     );
 }

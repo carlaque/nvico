@@ -1,3 +1,46 @@
+.drawingArea {
+  width: 100%;
+}
+
+.navbar {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #bbb2a4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 5%;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 100%;
+}
+
+.navbar a {
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+}
+
+.board {
+  height: 100%;
+  width: 100%;
+  background-color: blue;
+}
+
+.devicesBar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: brown;
+}
+
 .App {
   display: -webkit-box;
   display: -ms-flexbox;
