@@ -1,0 +1,13 @@
+$darkColor : red;
+$lightColor : blanchedalmond;
+$titleFont: Arial, Helvetica, sans-serif;
+
+@mixin buttonStyle {
+    width: 20vw;
+    height: 5vh;
+    background-color: $darkColor;
+    border: none;
+    border-radius: 8px;
+    color: $lightColor;
+    font-size: 20px;
+}
