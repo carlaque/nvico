@@ -5,7 +5,8 @@ export const ItemTypes = {
 export const DevicesList = [
   {
     "id": 1,
-    "type": "end-device",
+    "isConst": true,
+    "type": "endDevice",
     "name": "pc-da-nasa",
     "network": {
       "ip": "111.111.111.111",
@@ -18,7 +19,8 @@ export const DevicesList = [
   },
   {
     "id": 2,
-    "type": "end-device",
+    "isConst": true,
+    "type": "endDevice",
     "name": "pc-da-nasa2",
     "network": {
       "ip": "111.111.111.111",
