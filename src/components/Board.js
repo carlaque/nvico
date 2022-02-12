@@ -13,13 +13,14 @@ import "../styles/drawingArea.css"
 function Board(props) {
     const devices = DevicesList
 
-    const [board, setBoard] = useState([])
+    const [board, setBoard] = useState({})
 
     let __uniqueIdentifier__ = 0;
     let getIdentifier = () => {
         __uniqueIdentifier__++;
-        return __uniqueIdentifier__-1;
+        return __uniqueIdentifier__ - 1;
     }
+
     const isJSON = (text) => {
         try {
             const json = JSON.parse(text);
@@ -28,7 +29,6 @@ function Board(props) {
             return false
         }
     }
-    
 
     useEffect(
         () => {
@@ -44,76 +44,68 @@ function Board(props) {
         , [props.network]
     );
 
-    const [{ isOver }, drop] = useDrop(() => ({
-        accept: ItemTypes.ENDDEVICE,
-        drop: (item, monitor) => {
-            console.log( monitor.getClientOffset())
-            const delta = item.isConst 
-                ? monitor.getDifferenceFromInitialOffset() : monitor.getClientOffset();
-            const left = Math.round(item.left || 0 + delta.x);
-            const top = Math.round(item.top || 0 , delta.y);
- 
-            
-            console.log("isConst", item);
-            if( item.isConst != undefined || item.isConst ){
-                alert('add')
-                addDevice(item.id, left, top)            }
-            else{
-                alert('move')
-                moveDevice(item.id, left, top)
-            }
-
-            return undefined;
+    const moveDevice = useCallback(
+        (id, left, top) => {
+            setBoard((board) => {
+                board[id].left = left
+                board[id].top = top
+                return board
+            })
         },
-        collect: (monitor) => ({
-            isOver: !!monitor.isOver()
-        })
-    }))
-
-    const moveDevice = useCallback((id, left, top) => {
-        setBoard( (board) => {
-            board[id].left = left
-            board[id].top = top
-            return board
-        })
-    })
+        [board, setBoard]
+    )
 
     const addDevice = (id, left, top) => {
-        const devList = devices.filter( (dev) => id === dev.id);
-        devList[0]["left"] = left
-        devList[0]["top"] = top
-        
-        let newDevice = Object.assign({},{ ...devList[0] }, { isConst:undefined } ) ;
-        newDevice.id = getIdentifier()   
-    
-        console.log(newDevice)
+        const found = devices.filter((dev) => id === dev.id);
+        found[0]["left"] = left
+        found[0]["top"] = top
 
-        setBoard( (board) => [...board, newDevice]);
+        let newDevice = {};
+        let newId = getIdentifier()
+        newDevice[newId] = { ...found[0] }
+        newDevice[newId].isConst = undefined
+        newDevice[newId].id = newId
+
+        setBoard((board) => Object.assign(board, newDevice));
     }
 
+    const [{ isOver }, drop] = useDrop(
+        () => ({
+            accept: ItemTypes.ENDDEVICE,
+            drop: (item, monitor) => {
+                const delta = monitor.getDifferenceFromInitialOffset()
+                const left = Math.round((item.left || 0) + delta.x);
+                const top = Math.round((item.top || 0) + delta.y);
+
+                if (item.isConst != undefined || item.isConst)
+                    addDevice(item.id, left, top)
+                else
+                    moveDevice(item.id, left, top)
+
+                return undefined;
+            },
+            collect: (monitor) => ({
+                isOver: !!monitor.isOver()
+            }),
+        }),
+        [moveDevice],
+    )
+
     return (
-        <>
+        <div className='drawingArea'>
             <div className='devicesBar'>
-                <input type={"button"} onClick={()=>console.log(board)} />
-                <input type={"button"} onClick={()=>console.log(devices)} />
-                {
-                    devices.map((dev) => {
-                        return <Device properties={dev} id={dev.id} />
-                    })
-                }
+                {devices.map((dev) => {
+                    return <Device properties={dev} id={dev.id} />
+                })}
             </div>
 
             <div ref={drop} className='board'>
-                {
-                    board.map((dev) => {
-                        return <div onClick={()=>alert(dev.id)}>
-                                    <Device  properties={dev} id={dev.id} />
-                                </div>
-                    })
-                }
+                {Object.entries(board).map(([key, dev]) => {
+                    return <Device properties={dev} id={key} />
+                })}
             </div>
 
-        </>
+        </div>
 
     );
 }

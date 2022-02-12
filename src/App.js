@@ -1,6 +1,11 @@
 import "./styles/styles.css"
-import DrawingArea from "./components/DrawingArea.js"
 import { useState } from "react";
+
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
+import "./styles/drawingArea.css"
+import Board from "./components/Board.js"
 
 function App() {
 
@@ -8,21 +13,22 @@ function App() {
 
   const geraRede = () => {
     let text = document.getElementsByTagName("textarea").input.value
-    // // document.getElementsByTagName("textarea").input.value = JSON.stringify(text)
     setNetwork(text)
   };
 
   return (
     <div className="App">
-      <aside>
+      {/* <aside>
         <h1>JSON AQUI</h1>
         <textarea 
         name="input" cols="60" rows="40" placeholder=" Digite aqui o JSON para gerar uma rede..."></textarea>
         <button onClick={geraRede}>Gerar Rede</button>
-      </aside>
+      </aside> */}
       
-      <DrawingArea network={network} />
-      
+      <DndProvider backend={HTML5Backend}>
+        <Board network={network} />
+      </DndProvider>
+
     </div>
   );
 }

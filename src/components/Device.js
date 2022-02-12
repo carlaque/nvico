@@ -18,23 +18,30 @@ function Device(props) {
                 isDragging: !!monitor.isDragging()
             })
         }),
-        []
+        [props.properties]
     )
-    return (
-        <div
-            className='device'
-            ref={drag}
-            style={{
-                opacity: isDragging ? 0.5 : 1,
-                // background: "transparent",
-                cursor: 'move',
-                width: "10vw",
-            }} >
-            {React.cloneElement(
-                components[props.properties.type],
-                props.properties)}
-        </div>
-    );
+
+    if (isDragging)
+        return <div className='device' ref={drag} />
+    else
+        return (
+            <div
+                className='device'
+                ref={drag}
+                style={{
+                    opacity: isDragging ? 0.5 : 1,
+                    cursor: 'move',
+                    width: "10vw",
+                    position: props.properties.isConst || "relative",
+                    left: props.properties.left,
+                    top: props.properties.top
+                }} >
+                <button onClick={() => { console.log(props) }}>ver</button>
+                {React.cloneElement(
+                    components[props.properties.type],
+                    props.properties)}
+            </div>
+        );
 }
 
 export default Device;

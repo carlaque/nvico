@@ -1,5 +1,5 @@
 export const ItemTypes = {
-  ENDDEVICE: 'enddevice'
+  ENDDEVICE: 'endDevice'
 }
 
 export const DevicesList = [
