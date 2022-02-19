@@ -57,14 +57,14 @@ function Board(props) {
 
     const addDevice = (id, left, top) => {
         const found = devices.filter((dev) => id === dev.id);
-        found[0]["left"] = left
-        found[0]["top"] = top
 
         let newDevice = {};
         let newId = getIdentifier()
         newDevice[newId] = { ...found[0] }
         newDevice[newId].isConst = undefined
         newDevice[newId].id = newId
+        newDevice[newId].left = left
+        newDevice[newId].top = top
 
         setBoard((board) => Object.assign(board, newDevice));
     }
@@ -74,10 +74,15 @@ function Board(props) {
             accept: ItemTypes.ENDDEVICE,
             drop: (item, monitor) => {
                 const delta = monitor.getDifferenceFromInitialOffset()
-                const left = Math.round((item.left || 0) + delta.x);
-                const top = Math.round((item.top || 0) + delta.y);
+                const initialCoordinates = monitor.getInitialClientOffset()
+                console.log("initialCoordinates", initialCoordinates)
+                const left = Math.round(item.left ? item.left + delta.x : initialCoordinates.x);
+                const top = Math.round(item.top ? item.top + delta.y : initialCoordinates.y);
 
-                if (item.isConst != undefined || item.isConst)
+                console.log("new ", { left, top })
+
+
+                if ((item.isConst != undefined) || item.isConst)
                     addDevice(item.id, left, top)
                 else
                     moveDevice(item.id, left, top)

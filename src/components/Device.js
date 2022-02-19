@@ -21,8 +21,10 @@ function Device(props) {
         [props.properties]
     )
 
-    if (isDragging)
-        return <div className='device' ref={drag} />
+    if (isDragging  && !props.properties.isConst )
+        return <div className='device' ref={drag} style={{
+            position: "absolute",
+        }}/>
     else
         return (
             <div
@@ -34,7 +36,8 @@ function Device(props) {
                     width: "10vw",
                     position: props.properties.isConst || "relative",
                     left: props.properties.left,
-                    top: props.properties.top
+                    top: props.properties.top,
+                    margin : props.properties.isConst || '0'
                 }} >
                 <button onClick={() => { console.log(props) }}>ver</button>
                 {React.cloneElement(

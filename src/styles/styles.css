@@ -1,6 +1,13 @@
 .drawingArea {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
 }
 
 .navbar {
@@ -26,6 +33,7 @@
   height: 100%;
   width: 100%;
   background-color: blue;
+  position: relative;
 }
 
 .devicesBar {
