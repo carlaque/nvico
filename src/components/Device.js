@@ -9,6 +9,10 @@ const components = {
     endDevice: <EndDevice />
 }
 
+function openDeviceEditor(){
+    // todo : set config device popup 
+}
+
 function Device(props) {
     const [{ isDragging }, drag] = useDrag(
         () => ({
@@ -30,16 +34,16 @@ function Device(props) {
             <div
                 className='device'
                 ref={drag}
+                onDoubleClick={() => { props.properties.isConst || openDeviceEditor()  }}
                 style={{
                     opacity: isDragging ? 0.5 : 1,
                     cursor: 'move',
                     width: "10vw",
-                    position: props.properties.isConst || "relative",
+                    position: props.properties.isConst || "absolute",
                     left: props.properties.left,
                     top: props.properties.top,
                     margin : props.properties.isConst || '0'
                 }} >
-                <button onClick={() => { console.log(props) }}>ver</button>
                 {React.cloneElement(
                     components[props.properties.type],
                     props.properties)}

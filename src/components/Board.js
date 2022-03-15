@@ -73,14 +73,10 @@ function Board(props) {
         () => ({
             accept: ItemTypes.ENDDEVICE,
             drop: (item, monitor) => {
+                let boardOffset = document.getElementsByClassName('board')[0].getBoundingClientRect()
                 const delta = monitor.getDifferenceFromInitialOffset()
-                const initialCoordinates = monitor.getInitialClientOffset()
-                console.log("initialCoordinates", initialCoordinates)
-                const left = Math.round(item.left ? item.left + delta.x : initialCoordinates.x);
-                const top = Math.round(item.top ? item.top + delta.y : initialCoordinates.y);
-
-                console.log("new ", { left, top })
-
+                const left = Math.round(item.left ? item.left + delta.x : window.event.clientX - boardOffset.x);
+                const top = Math.round(item.top ? item.top + delta.y : window.event.clientY - boardOffset.y);
 
                 if ((item.isConst != undefined) || item.isConst)
                     addDevice(item.id, left, top)
@@ -89,9 +85,8 @@ function Board(props) {
 
                 return undefined;
             },
-            collect: (monitor) => ({
-                isOver: !!monitor.isOver()
-            }),
+            collect: (monitor) => ({ isOver: !!monitor.isOver()})
+            ,
         }),
         [moveDevice],
     )

@@ -17,7 +17,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App" >
       {/* <aside>
         <h1>JSON AQUI</h1>
         <textarea 
