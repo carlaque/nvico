@@ -12,8 +12,13 @@ import "../styles/drawingArea.css"
 
 function Board(props) {
     const devices = DevicesList
+    const connections = [];
+
+    let remainingConnections = 2
 
     const [board, setBoard] = useState({})
+    const [connection, setConnection] = useState({ "from": null, "to": null })
+    const [cable, setCable] = useState(false)
 
     let __uniqueIdentifier__ = 0;
     let getIdentifier = () => {
@@ -85,23 +90,41 @@ function Board(props) {
 
                 return undefined;
             },
-            collect: (monitor) => ({ isOver: !!monitor.isOver()})
+            collect: (monitor) => ({ isOver: !!monitor.isOver() })
             ,
         }),
         [moveDevice],
     )
+    const addConnection = (device) => {
+
+        if (connection.from === null)
+            connection.from = device
+        else if (connection.to === null)
+            connection.to = device
+        else {
+            setCable(false)
+            remainingConnections = 0
+        }
+        remainingConnections = - 1
+        console.log(connection)
+
+    }
 
     return (
-        <div className='drawingArea'>
+        <div className='drawingArea' >
             <div className='devicesBar'>
                 {devices.map((dev) => {
                     return <Device properties={dev} id={dev.id} />
                 })}
+                <button onClick={() => setCable(!cable)}>Criar Conexao</button>
             </div>
 
             <div ref={drop} className='board'>
                 {Object.entries(board).map(([key, dev]) => {
-                    return <Device properties={dev} id={key} />
+                    return <button style={{ all: 'unset' }}
+                        onClick={() => { cable && addConnection(dev) }}>
+                        <Device connectionBeingSet={cable} properties={dev} id={key} />
+                    </button>
                 })}
             </div>
 

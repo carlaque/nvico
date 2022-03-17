@@ -9,8 +9,9 @@ const components = {
     endDevice: <EndDevice />
 }
 
-function openDeviceEditor(){
+function openDeviceEditor(props) {
     // todo : set config device popup 
+    console.log(props)
 }
 
 function Device(props) {
@@ -25,16 +26,16 @@ function Device(props) {
         [props.properties]
     )
 
-    if (isDragging  && !props.properties.isConst )
+    if (isDragging && !props.properties.isConst && !props.connectionBeingSet)
         return <div className='device' ref={drag} style={{
             position: "absolute",
-        }}/>
+        }} />
     else
         return (
             <div
                 className='device'
                 ref={drag}
-                onDoubleClick={() => { props.properties.isConst || openDeviceEditor()  }}
+                onDoubleClick={() => { props.properties.isConst || openDeviceEditor(props) }}
                 style={{
                     opacity: isDragging ? 0.5 : 1,
                     cursor: 'move',
@@ -42,7 +43,7 @@ function Device(props) {
                     position: props.properties.isConst || "absolute",
                     left: props.properties.left,
                     top: props.properties.top,
-                    margin : props.properties.isConst || '0'
+                    margin: props.properties.isConst || '0'
                 }} >
                 {React.cloneElement(
                     components[props.properties.type],
