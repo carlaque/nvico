@@ -15,6 +15,7 @@ export const DevicesList = [
       "gateway": "333.333.333.333",
       "dnsServer": ""
     },
+    "connection": null,
     "interface": "FAST_ETHERNET"
   },
   {
@@ -29,6 +30,7 @@ export const DevicesList = [
       "gateway": "333.333.333.333",
       "dnsServer": ""
     },
+    "connection": null,
     "interface": "FAST_ETHERNET"
   }
 ]

@@ -12,13 +12,11 @@ import "../styles/drawingArea.css"
 
 function Board(props) {
     const devices = DevicesList
-    const connections = [];
-
-    let remainingConnections = 2
 
     const [board, setBoard] = useState({})
     const [connection, setConnection] = useState({ "from": null, "to": null })
     const [cable, setCable] = useState(false)
+    const [connections, setConnections] = useState([])
 
     let __uniqueIdentifier__ = 0;
     let getIdentifier = () => {
@@ -35,19 +33,19 @@ function Board(props) {
         }
     }
 
-    useEffect(
-        () => {
-            if (isJSON(props.network)) {
-                const componentes = JSON.parse(props.network).componentes
-                setBoard(componentes.map(
-                    (dev) => ({
-                        id: { ...dev }
-                    })
-                ))
-            }
-        }
-        , [props.network]
-    );
+    // useEffect(
+    //     () => {
+    //         if (isJSON(props.network)) {
+    //             const componentes = JSON.parse(props.network).componentes
+    //             setBoard(componentes.map(
+    //                 (dev) => ({
+    //                     id: { ...dev }
+    //                 })
+    //             ))
+    //         }
+    //     }
+    //     , [props.network]
+    // );
 
     const moveDevice = useCallback(
         (id, left, top) => {
@@ -95,19 +93,33 @@ function Board(props) {
         }),
         [moveDevice],
     )
+
+    useEffect(() => {
+        if (connection.from != null && connection.to != null)
+            updateConnections()
+        console.log(connections)
+    }, [connection,connections]);
+
     const addConnection = (device) => {
-
         if (connection.from === null)
-            connection.from = device
+            setConnection({ ...connection, from: device })
         else if (connection.to === null)
-            connection.to = device
-        else {
-            setCable(false)
-            remainingConnections = 0
-        }
-        remainingConnections = - 1
-        console.log(connection)
+            setConnection({ ...connection, to: device })
+    }
 
+    const updateConnections = () => {
+        // console.log('from', connection.from)
+        // console.log('to', connection.to)
+        setConnections([...connections,connection]) 
+        setCable(false)
+        setConnection({ "from": null, "to": null })
+    }
+
+    const isConnectable = (device) => {
+        // TODO: deixamos ele sobreescrever uma connection ja existente ?
+        // TODO: set condicoes em que o device eh elegivel de se conectar 
+        // futuramente considerar se o segundo dispositivo pode se conectar ao primeiro 
+        return true
     }
 
     return (
@@ -122,7 +134,7 @@ function Board(props) {
             <div ref={drop} className='board'>
                 {Object.entries(board).map(([key, dev]) => {
                     return <button style={{ all: 'unset' }}
-                        onClick={() => { cable && addConnection(dev) }}>
+                        onClick={() => { cable && (isConnectable(dev) && addConnection(dev)) }}>
                         <Device connectionBeingSet={cable} properties={dev} id={key} />
                     </button>
                 })}
