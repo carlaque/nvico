@@ -14,7 +14,7 @@ function Board(props) {
     const devices = DevicesList
     const [lines, setLines] = useState([]);
 
-    const [board, setBoard] = useState({})
+    const [board, setBoard] = useState([])
     const [connection, setConnection] = useState({ "from": null, "to": null })
     const [cable, setCable] = useState(false)
     const [connections, setConnections] = useState([])
@@ -87,17 +87,6 @@ function Board(props) {
                 else
                     moveDevice(item.id, left, top)
 
-
-                if (board.length === 2) {
-                    let newLines = lines.concat({
-                        x1: board[0].left,
-                        y1: board[0].top,
-                        x2: board[1].left,
-                        y2: board[1].top
-                    })
-                    setLines(newLines);
-                }
-                
                 return undefined;
             },
             collect: (monitor) => ({ isOver: !!monitor.isOver() })
@@ -109,8 +98,8 @@ function Board(props) {
     useEffect(() => {
         if (connection.from != null && connection.to != null)
             updateConnections()
-        console.log(connections)
-    }, [connection,connections]);
+        console.log(lines)
+    }, [connection, connections, lines]);
 
     const addConnection = (device) => {
         if (connection.from === null)
@@ -122,7 +111,15 @@ function Board(props) {
     const updateConnections = () => {
         // console.log('from', connection.from)
         // console.log('to', connection.to)
-        setConnections([...connections,connection]) 
+        let newLines = lines.concat({
+            x1: connection.from.left,
+            y1: connection.from.top,
+            x2: connection.to.left,
+            y2: connection.to.top
+        })
+        setLines(newLines);
+
+        setConnections([...connections, connection])
         setCable(false)
         setConnection({ "from": null, "to": null })
     }
@@ -140,12 +137,14 @@ function Board(props) {
                 {devices.map((dev) => {
                     return <Device properties={dev} id={dev.id} />
                 })}
+                <button onClick={() => setCable(!cable)}>Criar Conexao</button>
             </div>
 
             <div ref={drop} className='board'>
                 {
                     lines.map((line, key) => {
                         // x-left y-top
+                        // console.log('aqui oh',line, key)
                         return  <svg id={key} width={Math.max(line.x1, line.x2)} height="500">
                                     <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} stroke="black"/>
                                 </svg>
