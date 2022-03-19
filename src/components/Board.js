@@ -12,6 +12,7 @@ import "../styles/drawingArea.css"
 
 function Board(props) {
     const devices = DevicesList
+    const [lines, setLines] = useState([]);
 
     const [board, setBoard] = useState({})
     const [connection, setConnection] = useState({ "from": null, "to": null })
@@ -86,6 +87,17 @@ function Board(props) {
                 else
                     moveDevice(item.id, left, top)
 
+
+                if (board.length === 2) {
+                    let newLines = lines.concat({
+                        x1: board[0].left,
+                        y1: board[0].top,
+                        x2: board[1].left,
+                        y2: board[1].top
+                    })
+                    setLines(newLines);
+                }
+                
                 return undefined;
             },
             collect: (monitor) => ({ isOver: !!monitor.isOver() })
@@ -128,10 +140,17 @@ function Board(props) {
                 {devices.map((dev) => {
                     return <Device properties={dev} id={dev.id} />
                 })}
-                <button onClick={() => setCable(!cable)}>Criar Conexao</button>
             </div>
 
             <div ref={drop} className='board'>
+                {
+                    lines.map((line, key) => {
+                        // x-left y-top
+                        return  <svg id={key} width={Math.max(line.x1, line.x2)} height="500">
+                                    <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} stroke="black"/>
+                                </svg>
+                    })
+                }
                 {Object.entries(board).map(([key, dev]) => {
                     return <button style={{ all: 'unset' }}
                         onClick={() => { cable && (isConnectable(dev) && addConnection(dev)) }}>
