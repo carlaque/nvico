@@ -12,12 +12,12 @@ import "../styles/drawingArea.css"
 
 function Board(props) {
     const devices = DevicesList
-    const [lines, setLines] = useState([]);
 
     const [board, setBoard] = useState([])
-    const [connection, setConnection] = useState({ "from": null, "to": null })
     const [cable, setCable] = useState(false)
-    const [connections, setConnections] = useState([])
+    const [connections, setConnections] = useState(Array)
+
+    let connection = { "from": null, "to": null }
 
     let __uniqueIdentifier__ = 0;
     let getIdentifier = () => {
@@ -95,33 +95,34 @@ function Board(props) {
         [moveDevice],
     )
 
-    useEffect(() => {
-        if (connection.from != null && connection.to != null)
-            updateConnections()
-        console.log(lines)
-    }, [connection, connections, lines]);
+    // useEffect(() => {
+    //     if (connection.from != null && connection.to != null)
+    //         updateConnections()
+    //     console.log(lines)
+    // }, [connection, connections, lines]);
 
     const addConnection = (device) => {
         if (connection.from === null)
-            setConnection({ ...connection, from: device })
-        else if (connection.to === null)
-            setConnection({ ...connection, to: device })
+            connection.from = device
+        else if (connection.to === null) {
+            connection.to = device
+            updateConnections()
+        }
     }
 
     const updateConnections = () => {
-        // console.log('from', connection.from)
-        // console.log('to', connection.to)
-        let newLines = lines.concat({
-            x1: connection.from.left,
-            y1: connection.from.top,
-            x2: connection.to.left,
-            y2: connection.to.top
-        })
-        setLines(newLines);
+        // let newLines = lines.concat({
+        //     x1: connection.from.left,
+        //     y1: connection.from.top,
+        //     x2: connection.to.left,
+        //     y2: connection.to.top
+        // })
+        // setLines(newLines);
 
         setConnections([...connections, connection])
         setCable(false)
-        setConnection({ "from": null, "to": null })
+
+        connection = { "from": null, "to": null }
     }
 
     const isConnectable = (device) => {
@@ -142,12 +143,22 @@ function Board(props) {
 
             <div ref={drop} className='board'>
                 {
-                    lines.map((line, key) => {
+                    console.log(connections) || Object.entries(connections).map(([key, conn]) => {
                         // x-left y-top
-                        // console.log('aqui oh',line, key)
-                        return  <svg id={key} width={Math.max(line.x1, line.x2)} height="500">
-                                    <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} stroke="black"/>
-                                </svg>
+                        console.log(conn, key)
+                        let line = {
+                            x1: conn.from.left,
+                            y1: conn.from.top,
+                            x2: conn.to.left,
+                            y2: conn.to.top
+                        }
+                        return <div style={{
+                            position: 'absolute'
+                        }}>
+                            <svg id={key} width={Math.max(line.x1, line.x2)} height={Math.max(line.y1, line.y2)}>
+                                <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} stroke="black" />
+                            </svg>
+                        </div>
                     })
                 }
                 {Object.entries(board).map(([key, dev]) => {
