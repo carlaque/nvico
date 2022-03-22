@@ -4,10 +4,10 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .navbar {
@@ -30,8 +30,8 @@
 }
 
 .board {
-  height: 100%;
-  width: 100%;
+  height: 80vh;
+  width: 90vw;
   background-color: blue;
   position: relative;
 }
@@ -40,14 +40,14 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+      -ms-flex-direction: row;
+          flex-direction: row;
   -ms-flex-pack: distribute;
       justify-content: space-around;
-  height: 100%;
-  padding: .5rem;
+  height: 20%;
+  width: 100%;
 }
 
 .device {

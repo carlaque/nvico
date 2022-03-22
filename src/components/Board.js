@@ -3,7 +3,6 @@ import { useDrop } from 'react-dnd';
 import update from 'immutability-helper';
 
 
-import EndDevice from "./EndDevice.js"
 import Device from "./Device.js"
 import { ItemTypes, DevicesList } from './Constants'
 
@@ -102,10 +101,16 @@ function Board(props) {
     // }, [connection, connections, lines]);
 
     const addConnection = (device) => {
+        if (device.connection === 1) {
+            return
+        }
         if (connection.from === null)
             connection.from = device
         else if (connection.to === null) {
             connection.to = device
+            // let d1 = board.filter((dev) => connection.from === dev.id)
+            // let d2 = board.filter((dev) => device === dev.id)
+            // update board?????
             updateConnections()
         }
     }
@@ -129,7 +134,12 @@ function Board(props) {
         // TODO: deixamos ele sobreescrever uma connection ja existente ?
         // TODO: set condicoes em que o device eh elegivel de se conectar 
         // futuramente considerar se o segundo dispositivo pode se conectar ao primeiro 
-        return true
+
+        return device.connection == null || true
+    }
+
+    const parseRem = (x) => {
+        return x * parseInt(getComputedStyle(document.documentElement).fontSize);
     }
 
     return (
@@ -143,9 +153,8 @@ function Board(props) {
 
             <div ref={drop} className='board'>
                 {
-                    console.log(connections) || Object.entries(connections).map(([key, conn]) => {
+                    Object.entries(connections).map(([key, conn]) => {
                         // x-left y-top
-                        console.log(conn, key)
                         let line = {
                             x1: conn.from.left,
                             y1: conn.from.top,
@@ -155,8 +164,11 @@ function Board(props) {
                         return <div style={{
                             position: 'absolute'
                         }}>
-                            <svg id={key} width={Math.max(line.x1, line.x2)} height={Math.max(line.y1, line.y2)}>
-                                <line x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2} stroke="black" />
+                            <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
+                                <line   x1={line.x1 + (parseRem(4))} 
+                                        y1={line.y1 + (parseRem(4))} 
+                                        x2={line.x2 + (parseRem(4))} 
+                                        y2={line.y2 + (parseRem(4))} stroke="black" />
                             </svg>
                         </div>
                     })

@@ -39,7 +39,7 @@ function Device(props) {
                 style={{
                     opacity: isDragging ? 0.5 : 1,
                     cursor: 'move',
-                    width: "10vw",
+                    width: "8rem",
                     position: props.properties.isConst || "absolute",
                     left: props.properties.left,
                     top: props.properties.top,
