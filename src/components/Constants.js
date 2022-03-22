@@ -15,13 +15,14 @@ export const DevicesList = [
       "gateway": "333.333.333.333",
       "dnsServer": ""
     },
-    "connection": null,
+    "maxConnections": 1,
+    "currentConnections": 0,
     "interface": "FAST_ETHERNET"
   },
   {
     "id": 2,
     "isConst": true,
-    "type": "endDevice",
+    "type": "router",
     "name": "pc-da-nasa2",
     "network": {
       "ip": "111.111.111.111",
@@ -30,7 +31,8 @@ export const DevicesList = [
       "gateway": "333.333.333.333",
       "dnsServer": ""
     },
-    "connection": null,
+    "maxConnections": 1,
+    "currentConnections": 0,
     "interface": "FAST_ETHERNET"
   }
 ]

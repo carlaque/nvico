@@ -3,10 +3,12 @@ import { useDrag } from 'react-dnd'
 import { ItemTypes } from './Constants'
 
 import EndDevice from './EndDevice.js';
+import Router from './RouterDevice.js'
 
 
 const components = {
-    endDevice: <EndDevice />
+    endDevice: <EndDevice />,
+    router: <Router />
 }
 
 function openDeviceEditor(props) {

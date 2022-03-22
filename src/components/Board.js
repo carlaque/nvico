@@ -101,9 +101,6 @@ function Board(props) {
     // }, [connection, connections, lines]);
 
     const addConnection = (device) => {
-        if (device.connection === 1) {
-            return
-        }
         if (connection.from === null)
             connection.from = device
         else if (connection.to === null) {
@@ -130,6 +127,7 @@ function Board(props) {
         connection = { "from": null, "to": null }
     }
 
+    // TODO: aplicar no device
     const isConnectable = (device) => {
         // TODO: deixamos ele sobreescrever uma connection ja existente ?
         // TODO: set condicoes em que o device eh elegivel de se conectar 
