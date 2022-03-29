@@ -31,7 +31,7 @@ export const DevicesList = [
       "gateway": "333.333.333.333",
       "dnsServer": ""
     },
-    "maxConnections": 1,
+    "maxConnections": 2,
     "currentConnections": 0,
     "interface": "FAST_ETHERNET"
   }

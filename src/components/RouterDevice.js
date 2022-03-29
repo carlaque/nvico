@@ -2,7 +2,7 @@ import React from 'react';
 import RouterImagem from "../assets/router.svg"
 
 
-export default function EndDevice(props) {
+export default function RouterDevice(props) {
     
     return (
         <>

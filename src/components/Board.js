@@ -105,35 +105,32 @@ function Board(props) {
             connection.from = device
         else if (connection.to === null) {
             connection.to = device
-            // let d1 = board.filter((dev) => connection.from === dev.id)
-            // let d2 = board.filter((dev) => device === dev.id)
-            // update board?????
             updateConnections()
         }
     }
 
     const updateConnections = () => {
-        // let newLines = lines.concat({
-        //     x1: connection.from.left,
-        //     y1: connection.from.top,
-        //     x2: connection.to.left,
-        //     y2: connection.to.top
-        // })
-        // setLines(newLines);
+
+        board.filter((dev) => {
+            if (connection.from.id === dev.id)
+                dev.currentConnections++
+
+            if (connection.to.id === dev.id)
+                dev.currentConnections++
+
+        })
 
         setConnections([...connections, connection])
         setCable(false)
 
         connection = { "from": null, "to": null }
+
     }
 
-    // TODO: aplicar no device
     const isConnectable = (device) => {
-        // TODO: deixamos ele sobreescrever uma connection ja existente ?
-        // TODO: set condicoes em que o device eh elegivel de se conectar 
-        // futuramente considerar se o segundo dispositivo pode se conectar ao primeiro 
+        // TODO futuramente considerar se o segundo dispositivo pode se conectar ao primeiro 
 
-        return device.connection == null || true
+        return device.currentConnections < device.maxConnections
     }
 
     const parseRem = (x) => {
@@ -163,10 +160,10 @@ function Board(props) {
                             position: 'absolute'
                         }}>
                             <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
-                                <line   x1={line.x1 + (parseRem(4))} 
-                                        y1={line.y1 + (parseRem(4))} 
-                                        x2={line.x2 + (parseRem(4))} 
-                                        y2={line.y2 + (parseRem(4))} stroke="black" />
+                                <line x1={line.x1 + (parseRem(4))}
+                                    y1={line.y1 + (parseRem(4))}
+                                    x2={line.x2 + (parseRem(4))}
+                                    y2={line.y2 + (parseRem(4))} stroke="black" />
                             </svg>
                         </div>
                     })
