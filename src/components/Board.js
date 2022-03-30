@@ -6,8 +6,6 @@ import update from 'immutability-helper';
 import Device from "./Device.js"
 import { ItemTypes, DevicesList } from './Constants'
 
-import "../styles/drawingArea.css"
-
 
 function Board(props) {
     const devices = DevicesList
@@ -23,29 +21,6 @@ function Board(props) {
         __uniqueIdentifier__++;
         return __uniqueIdentifier__ - 1;
     }
-
-    const isJSON = (text) => {
-        try {
-            const json = JSON.parse(text);
-            return true
-        } catch (e) {
-            return false
-        }
-    }
-
-    // useEffect(
-    //     () => {
-    //         if (isJSON(props.network)) {
-    //             const componentes = JSON.parse(props.network).componentes
-    //             setBoard(componentes.map(
-    //                 (dev) => ({
-    //                     id: { ...dev }
-    //                 })
-    //             ))
-    //         }
-    //     }
-    //     , [props.network]
-    // );
 
     const moveDevice = useCallback(
         (id, left, top) => {
@@ -94,12 +69,6 @@ function Board(props) {
         [moveDevice],
     )
 
-    // useEffect(() => {
-    //     if (connection.from != null && connection.to != null)
-    //         updateConnections()
-    //     console.log(lines)
-    // }, [connection, connections, lines]);
-
     const addConnection = (device) => {
         if (connection.from === null)
             connection.from = device
@@ -110,26 +79,21 @@ function Board(props) {
     }
 
     const updateConnections = () => {
-
-        board.filter((dev) => {
+        board.forEach((dev) => {
             if (connection.from.id === dev.id)
                 dev.currentConnections++
-
             if (connection.to.id === dev.id)
                 dev.currentConnections++
-
         })
 
         setConnections([...connections, connection])
         setCable(false)
 
         connection = { "from": null, "to": null }
-
     }
 
     const isConnectable = (device) => {
         // TODO futuramente considerar se o segundo dispositivo pode se conectar ao primeiro 
-
         return device.currentConnections < device.maxConnections
     }
 
@@ -149,35 +113,37 @@ function Board(props) {
             <div ref={drop} className='board'>
                 {
                     Object.entries(connections).map(([key, conn]) => {
-                        // x-left y-top
+                        // x==left y==top
                         let line = {
                             x1: conn.from.left,
                             y1: conn.from.top,
                             x2: conn.to.left,
                             y2: conn.to.top
                         }
-                        return <div style={{
-                            position: 'absolute'
-                        }}>
-                            <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
-                                <line x1={line.x1 + (parseRem(4))}
-                                    y1={line.y1 + (parseRem(4))}
-                                    x2={line.x2 + (parseRem(4))}
-                                    y2={line.y2 + (parseRem(4))} stroke="black" />
-                            </svg>
-                        </div>
+                        return  <div style={{position: 'absolute'}}>
+                                    <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
+                                        <line x1={line.x1 + parseRem(-4)}
+                                            y1={line.y1 + parseRem(4)}
+                                            x2={line.x2 + parseRem(-4)}
+                                            y2={line.y2 + parseRem(4)}
+                                            stroke="black"
+                                            shapeRendering="geometricPrecision"
+                                            strokeWidth="3"
+                                        />
+                                    </svg>
+                                </div>
                     })
                 }
-                {Object.entries(board).map(([key, dev]) => {
-                    return <button style={{ all: 'unset' }}
-                        onClick={() => { cable && (isConnectable(dev) && addConnection(dev)) }}>
-                        <Device connectionBeingSet={cable} properties={dev} id={key} />
-                    </button>
-                })}
+                {
+                    Object.entries(board).map(([key, dev]) => {
+                        return  <button style={{ all: 'unset' }}
+                                    onClick={() => { cable && (isConnectable(dev) && addConnection(dev)) }}>
+                                    <Device connectionBeingSet={cable} properties={dev} id={key} />
+                                </button>
+                    })
+                }
             </div>
-
         </div>
-
     );
 }
 

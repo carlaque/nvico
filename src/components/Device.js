@@ -35,7 +35,7 @@ function Device(props) {
     else
         return (
             <div
-                className='device'
+                className={'device '+ (props.properties.isConst ? '' : 'deviceOnBoard')}
                 ref={drag}
                 onDoubleClick={() => { props.properties.isConst || openDeviceEditor(props) }}
                 style={{

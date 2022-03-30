@@ -4,17 +4,9 @@ import { useState } from "react";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import "./styles/drawingArea.css"
 import Board from "./components/Board.js"
 
 function App() {
-
-  const [network, setNetwork] = useState("");
-
-  const geraRede = () => {
-    let text = document.getElementsByTagName("textarea").input.value
-    setNetwork(text)
-  };
 
   return (
     <div className="App" >
@@ -26,7 +18,7 @@ function App() {
       </aside> */}
       
       <DndProvider backend={HTML5Backend}>
-        <Board network={network} />
+        <Board />
       </DndProvider>
 
     </div>
