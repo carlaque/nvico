@@ -4,17 +4,16 @@ import { ItemTypes } from './Constants'
 
 import EndDevice from './EndDevice.js';
 import Router from './RouterDevice.js'
+import Switch from './SwitchDevice.js'
+import Popup from './DeviceEditorPopUp';
 
 
 const components = {
     endDevice: <EndDevice />,
-    router: <Router />
+    router: <Router />,
+    switch: <Switch />
 }
 
-function openDeviceEditor(props) {
-    // todo : set config device popup 
-    console.log(props)
-}
 
 function Device(props) {
     const [{ isDragging }, drag] = useDrag(
@@ -37,7 +36,6 @@ function Device(props) {
             <div
                 className={'device '+ (props.properties.isConst ? '' : 'deviceOnBoard')}
                 ref={drag}
-                onDoubleClick={() => { props.properties.isConst || openDeviceEditor(props) }}
                 style={{
                     opacity: isDragging ? 0.5 : 1,
                     cursor: 'move',

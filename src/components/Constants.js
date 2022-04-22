@@ -1,5 +1,7 @@
 export const ItemTypes = {
-  ENDDEVICE: 'endDevice'
+  ENDDEVICE: 'endDevice',
+  ROUTER : 'router',
+  SWITCH : 'switch'
 }
 
 export const DevicesList = [
@@ -7,7 +9,7 @@ export const DevicesList = [
     "id": 1,
     "isConst": true,
     "type": "endDevice",
-    "name": "pc-da-nasa",
+    "name": "End Device",
     "network": {
       "ip": "111.111.111.111",
       "mask": "222.222.222.222",
@@ -23,13 +25,18 @@ export const DevicesList = [
     "id": 2,
     "isConst": true,
     "type": "router",
-    "name": "pc-da-nasa2",
+    "name": "Router",
+    "maxConnections": 2,
+    "currentConnections": 0,
+    "interface": "FAST_ETHERNET"
+  },
+  {
+    "id": 3,
+    "isConst": true,
+    "type": "switch",
+    "name": "Switch",
     "network": {
-      "ip": "111.111.111.111",
-      "mask": "222.222.222.222",
-      "isDHCP": true,
-      "gateway": "333.333.333.333",
-      "dnsServer": ""
+      "ports":[]
     },
     "maxConnections": 2,
     "currentConnections": 0,

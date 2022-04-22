@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
-import update from 'immutability-helper';
+import Popup from './DeviceEditorPopUp.js';
+import { getPopUp } from './DeviceEditorPopUp.js';
 
 
 import Device from "./Device.js"
@@ -12,9 +13,13 @@ function Board(props) {
 
     const [board, setBoard] = useState([])
     const [cable, setCable] = useState(false)
+    const [showDevicePopUp, setPopup] = useState(false)
     const [connections, setConnections] = useState(Array)
+    const [selectedDeviceId, setSelectedDeviceId] = useState(Number)
+
 
     let connection = { "from": null, "to": null }
+    // let showDevicePopUp = false
 
     let __uniqueIdentifier__ = 0;
     let getIdentifier = () => {
@@ -49,7 +54,7 @@ function Board(props) {
 
     const [{ isOver }, drop] = useDrop(
         () => ({
-            accept: ItemTypes.ENDDEVICE,
+            accept: [ItemTypes.ENDDEVICE, ItemTypes.SWITCH, ItemTypes.ROUTER],
             drop: (item, monitor) => {
                 let boardOffset = document.getElementsByClassName('board')[0].getBoundingClientRect()
                 const delta = monitor.getDifferenceFromInitialOffset()
@@ -88,7 +93,7 @@ function Board(props) {
 
         setConnections([...connections, connection])
         setCable(false)
-
+        
         connection = { "from": null, "to": null }
     }
 
@@ -100,6 +105,14 @@ function Board(props) {
     const parseRem = (x) => {
         return x * parseInt(getComputedStyle(document.documentElement).fontSize);
     }
+
+    function openDeviceEditor(props) {
+        // todo : set config device popup 
+        setPopup(true)
+        setSelectedDeviceId(props.id)
+
+    }
+
 
     return (
         <div className='drawingArea' >
@@ -120,29 +133,36 @@ function Board(props) {
                             x2: conn.to.left,
                             y2: conn.to.top
                         }
-                        return  <div style={{position: 'absolute'}}>
-                                    <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
-                                        <line x1={line.x1 + parseRem(-4)}
-                                            y1={line.y1 + parseRem(4)}
-                                            x2={line.x2 + parseRem(-4)}
-                                            y2={line.y2 + parseRem(4)}
-                                            stroke="black"
-                                            shapeRendering="geometricPrecision"
-                                            strokeWidth="3"
-                                        />
-                                    </svg>
-                                </div>
+                        return <div style={{ position: 'absolute' }}>
+                            <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
+                                <line x1={line.x1 + parseRem(-4)}
+                                    y1={line.y1 + parseRem(4)}
+                                    x2={line.x2 + parseRem(-4)}
+                                    y2={line.y2 + parseRem(4)}
+                                    stroke="black"
+                                    shapeRendering="geometricPrecision"
+                                    strokeWidth="3"
+                                />
+                            </svg>
+                        </div>
                     })
                 }
                 {
                     Object.entries(board).map(([key, dev]) => {
-                        return  <button style={{ all: 'unset' }}
-                                    onClick={() => { cable && (isConnectable(dev) && addConnection(dev)) }}>
-                                    <Device connectionBeingSet={cable} properties={dev} id={key} />
-                                </button>
+                        return <button style={{ all: 'unset' }}
+                            onClick={
+                                () => { cable && (isConnectable(dev) && addConnection(dev)) }
+                            }
+                            onDoubleClick={
+                                () => { dev.isConst || openDeviceEditor({...dev}) }
+                            }>
+                            <Device connectionBeingSet={cable} properties={dev} id={key} />
+                        </button>
                     })
                 }
             </div>
+            <Popup show={showDevicePopUp} setShow={setPopup} deviceId={selectedDeviceId} board={board} setBoard={setBoard}>
+            </Popup>
         </div>
     );
 }

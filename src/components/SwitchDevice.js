@@ -1,12 +1,12 @@
 import React from 'react';
-import EndDeviceImagem from "../assets/endDevice.svg"
+import SwitchImagem from "../assets/switch.svg"
 
 
-export default function EndDevice(props) {
+export default function Switch(props) {
     
     return (
         <>
-            <img src={EndDeviceImagem} alt="" />
+            <img src={SwitchImagem} alt="" />
             <p>{props.name}</p>
             {/* TODO: adicionar STATUS da coneXão e conexoes */}
         </>
