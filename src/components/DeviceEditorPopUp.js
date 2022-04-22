@@ -1,14 +1,22 @@
-import React, { useCallback } from 'react';
-
-
+import React, { useCallback, useState, useEffect } from 'react';
 
 
 const Popup = (props) => {
 
+    const [device, setDevice] = useState({...props.device})
+
+
+
     const handleInputChange = useCallback(event => {
-        props.board[props.deviceId].maxConnections = event.target.value
-        props.setBoard([...props.board])
-    }, [props.setBoard])
+        device.maxConnections = event.target.value
+        setDevice({ ...device })
+    }, [device])
+
+    const handleSubmit = useCallback(event => {
+        event.preventDefault()
+        props.updateBoardWith(device)
+        props.setShow(false)
+    }, [props.updateBoardWith])
 
     const EndDevicePopup = () => {
         return (
@@ -19,13 +27,19 @@ const Popup = (props) => {
     }
 
     const SwitchPopup = () => {
+
         return (
             <div className="switchEdit">
-                <label htmlFor=""> Quantidade de Portas
-                    <input type="text" placeholder='0' value={props.board[props.deviceId].maxConnections} onChange={handleInputChange} />
-                </label>
+                <form onSubmit={handleSubmit} >
 
-                <input type="button" value="Aplicar" />
+                    <label> Quantidade de Portas </label>
+                    <input
+                        type="number"
+                        value={device.maxConnections}
+                        onChange={handleInputChange}
+                    />
+                    <input type="submit" value="Aplicar" />
+                </form>
             </div>
         )
     }
@@ -40,8 +54,14 @@ const Popup = (props) => {
         <div className="popup">
             <div className="popup-inner">
                 <h1>Edit Device</h1>
-                <button className='close-btn' onClick={() => { props.setShow(false) }}> + </button>
-                {components[props.board[props.deviceId].type]}
+                <button className='close-btn'
+                    onClick={
+                        () => {
+                            props.setShow(false);
+                            props.setSelectedDevice(null)
+                        }
+                    }> + </button>
+                {components[props.device.type]}
             </div>
         </div>
     ) : "";

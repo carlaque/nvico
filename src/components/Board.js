@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import Popup from './DeviceEditorPopUp.js';
-import { getPopUp } from './DeviceEditorPopUp.js';
 
 
 import Device from "./Device.js"
@@ -15,11 +14,9 @@ function Board(props) {
     const [cable, setCable] = useState(false)
     const [showDevicePopUp, setPopup] = useState(false)
     const [connections, setConnections] = useState(Array)
-    const [selectedDeviceId, setSelectedDeviceId] = useState(Number)
-
+    const [selectedDevice, setSelectedDevice] = useState(null)
 
     let connection = { "from": null, "to": null }
-    // let showDevicePopUp = false
 
     let __uniqueIdentifier__ = 0;
     let getIdentifier = () => {
@@ -93,7 +90,7 @@ function Board(props) {
 
         setConnections([...connections, connection])
         setCable(false)
-        
+
         connection = { "from": null, "to": null }
     }
 
@@ -106,11 +103,19 @@ function Board(props) {
         return x * parseInt(getComputedStyle(document.documentElement).fontSize);
     }
 
-    function openDeviceEditor(props) {
-        // todo : set config device popup 
+    const openDeviceEditor = (device) => {
         setPopup(true)
-        setSelectedDeviceId(props.id)
+        setSelectedDevice(device)
+    }
 
+    const updateBoardWith = (dev) => {
+        if (dev.id !== undefined) {
+            board[dev.id] = dev
+            setBoard((board) => {
+                board[dev.id] = dev
+                return board
+            })
+        }
     }
 
 
@@ -121,6 +126,8 @@ function Board(props) {
                     return <Device properties={dev} id={dev.id} />
                 })}
                 <button onClick={() => setCable(!cable)}>Criar Conexao</button>
+                <button onClick={() => console.log(board)}>Print Board</button>
+                <button onClick={() => console.log(connections)}>Print Connections</button>
             </div>
 
             <div ref={drop} className='board'>
@@ -154,15 +161,18 @@ function Board(props) {
                                 () => { cable && (isConnectable(dev) && addConnection(dev)) }
                             }
                             onDoubleClick={
-                                () => { dev.isConst || openDeviceEditor({...dev}) }
+                                () => { dev.isConst || openDeviceEditor(dev) }
                             }>
                             <Device connectionBeingSet={cable} properties={dev} id={key} />
                         </button>
                     })
                 }
             </div>
-            <Popup show={showDevicePopUp} setShow={setPopup} deviceId={selectedDeviceId} board={board} setBoard={setBoard}>
-            </Popup>
+            {
+                selectedDevice &&
+                <Popup show={showDevicePopUp} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
+                </Popup>
+            }
         </div>
     );
 }
