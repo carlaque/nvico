@@ -95,7 +95,6 @@ function Board(props) {
     }
 
     const isConnectable = (device) => {
-        // TODO futuramente considerar se o segundo dispositivo pode se conectar ao primeiro 
         return device.currentConnections < device.maxConnections
     }
 

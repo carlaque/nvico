@@ -1,53 +1,30 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { EndDeviceEditorForm } from './editorForms/EndDeviceEditorForm.js'
+import { SwitchEditorForm } from './editorForms/SwitchEditorForm.js'
+import { RouterEditorForm } from './editorForms/RouterEditorForm.js'
+
 
 
 const Popup = (props) => {
 
-    const [device, setDevice] = useState({...props.device})
-
-
-
-    const handleInputChange = useCallback(event => {
-        device.maxConnections = event.target.value
-        setDevice({ ...device })
-    }, [device])
+    const [device, setDevice] = useState({ ...props.device })
 
     const handleSubmit = useCallback(event => {
         event.preventDefault()
         props.updateBoardWith(device)
         props.setShow(false)
+        props.setSelectedDevice(null)
     }, [props.updateBoardWith])
 
-    const EndDevicePopup = () => {
-        return (
-            <div className="endDeviceEdit">
-                <input type="text" placeholder='000.000.000.000' />
-            </div>
-        )
-    }
+    const handleInputChange = useCallback(event => {
+        device[event.target.name] = event.target.value
+        setDevice({ ...device })
+    }, [device])
 
-    const SwitchPopup = () => {
-
-        return (
-            <div className="switchEdit">
-                <form onSubmit={handleSubmit} >
-
-                    <label> Quantidade de Portas </label>
-                    <input
-                        type="number"
-                        value={device.maxConnections}
-                        onChange={handleInputChange}
-                    />
-                    <input type="submit" value="Aplicar" />
-                </form>
-            </div>
-        )
-    }
-
-    const components = {
-        endDevice: <EndDevicePopup />,
-        router: <EndDevicePopup />,
-        switch: < SwitchPopup />
+    let components = {
+        endDevice: <EndDeviceEditorForm device={{ ...device }} setDevice={setDevice} handleSubmit={handleSubmit} handleInputChange={handleInputChange} />,
+        router: <RouterEditorForm device={{ ...device }} setDevice={setDevice} handleSubmit={handleSubmit} handleInputChange={handleInputChange} />,
+        switch: < SwitchEditorForm device={{ ...device }} setDevice={setDevice} handleSubmit={handleSubmit} handleInputChange={handleInputChange} />
     }
 
     return props.show ? (
@@ -61,7 +38,10 @@ const Popup = (props) => {
                             props.setSelectedDevice(null)
                         }
                     }> + </button>
-                {components[props.device.type]}
+                {/* {React.cloneElement( */}
+                    {components[props.device.type]}
+                    {/* {  ...device, setDevice, handleSubmit, handleInputChange })} */}
+
             </div>
         </div>
     ) : "";
