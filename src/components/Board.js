@@ -24,8 +24,6 @@ function Board(props) {
         return __uniqueIdentifier__ - 1;
     }
 
-    // Conseguir fazer funcionar sem o useCallback ou ele adicionar sem perder referencia pela primeira alteração
-    // TODO! O PROBLEMA É AQUI
     const moveDevice = useCallback(
         (id, left, top) => {
             setBoard((board) => {
@@ -129,14 +127,13 @@ function Board(props) {
         }
     }
 
-
     return (
-        <div className='drawingArea' >
+        <div className={cable? 'drawingArea mudaMouse': 'drawingArea'} >
             <div className='devicesBar'>
                 {devices.map((dev) => {
                     return <Device properties={dev} id={dev.id} />
                 })}
-                <button onClick={() => setCable(!cable)}>Criar Conexao</button>
+                <button onClick={() => setCable(!cable)} className={cable? 'greenBtn' : 'redBtn'}>Criar Conexao</button>
                 <button onClick={() => console.log(board)}>Print Board</button>
                 <button onClick={() => console.log(connections)}>Print Connections</button>
             </div>

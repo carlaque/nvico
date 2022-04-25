@@ -79,3 +79,15 @@
   cursor: pointer;
   transform: rotate(45deg);
 }
+
+.greenBtn {
+  background-color: greenyellow;
+}
+
+.redBtn {
+  background-color: red;
+}
+
+.mudaMouse {
+  cursor: cell;
+}
