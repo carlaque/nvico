@@ -15,6 +15,7 @@ export const SwitchEditorForm = ({ device, setDevice, handleSubmit, handleInputC
                 <label> Quantidade de Portas </label>
                 <input
                     type="number"
+                    
                     value={device.maxConnections}
                     onChange={handleInputChange}
                     name="maxConnections"
