@@ -7,19 +7,19 @@ import { RouterEditorForm } from './editorForms/RouterEditorForm.js'
 
 const Popup = (props) => {
 
-    const [device, setDevice] = useState({ ...props.device })
+    const [device, setDevice] = useState( props.device )
 
-    const handleSubmit = useCallback(event => {
+    const handleSubmit = (event) => {
         event.preventDefault()
         props.updateBoardWith(device)
         props.setShow(false)
         props.setSelectedDevice(null)
-    }, [props.updateBoardWith])
+    }
 
-    const handleInputChange = useCallback(event => {
+    const handleInputChange = (event) => {
         device[event.target.name] = event.target.value
         setDevice({ ...device })
-    }, [device])
+    }
 
     let components = {
         endDevice: <EndDeviceEditorForm device={{ ...device }} setDevice={setDevice} handleSubmit={handleSubmit} handleInputChange={handleInputChange} />,

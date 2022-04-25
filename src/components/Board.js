@@ -24,6 +24,8 @@ function Board(props) {
         return __uniqueIdentifier__ - 1;
     }
 
+    // Conseguir fazer funcionar sem o useCallback ou ele adicionar sem perder referencia pela primeira alteração
+    // TODO! O PROBLEMA É AQUI
     const moveDevice = useCallback(
         (id, left, top) => {
             setBoard((board) => {
