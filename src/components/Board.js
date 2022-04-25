@@ -116,6 +116,16 @@ function Board(props) {
                 board[dev.id] = dev
                 return board
             })
+            let c = connections.forEach(
+                (connection) => {
+                    if(connection.to.id === dev.id) {
+                        connection.to = dev;
+                    }
+                    else if(connection.from.id === dev.id) {
+                        connection.from = dev;
+                    }
+                }
+            )
         }
     }
 
