@@ -4,10 +4,10 @@ export const SwitchEditorForm = ({ device, setDevice, handleSubmit, handleInputC
 
     return (
         <div className="switchEdit">
-            <form onSubmit={handleSubmit} >
                 <label> Display Name </label>
                 <input
                     type="text"
+                    autoComplete="off"
                     value={device.name}
                     onChange={handleInputChange}
                     name="name"
@@ -15,13 +15,11 @@ export const SwitchEditorForm = ({ device, setDevice, handleSubmit, handleInputC
                 <label> Quantidade de Portas </label>
                 <input
                     type="number"
-                    
+                    autoComplete="off"
                     value={device.maxConnections}
                     onChange={handleInputChange}
                     name="maxConnections"
                 />
-                <input type="submit" value="Aplicar" />
-            </form>
         </div>
     )
 }

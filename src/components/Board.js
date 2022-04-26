@@ -95,7 +95,12 @@ function Board(props) {
     }
 
     const isConnectable = (device) => {
-        return device.currentConnections < device.maxConnections
+        // alert(connection.from != null && (connection.from.id !== device.id))
+        let isUnderMax = (device.currentConnections < device.maxConnections)
+        // return (isUnderMax && connection.to  == null) || (connection.to  != null && (connection.to.id != device.to.id) )
+        // return isUnderMax &&  (connection.to != null && connection.to.id != device.to.id)
+        // return connection.from != null ? isUnderMax && (connection.from.id != device.id ): isUnderMax
+        return isUnderMax
     }
 
     const parseRem = (x) => {
@@ -105,6 +110,26 @@ function Board(props) {
     const openDeviceEditor = (device) => {
         setPopup(true)
         setSelectedDevice(device)
+    }
+
+    const deleteDevice = (idDevice) => {
+        setConnections(connections.filter((connection, index, array) => {
+            if(connection.to.id === idDevice || connection.from.id === idDevice) { 
+                return false;
+            }
+            return true;
+        }))
+        let newBoard =  board
+        delete newBoard[idDevice]
+        setBoard(newBoard)
+        setPopup(false)
+        // setSelectedDevice(null)
+        // console.log(board.filter((device, index, array) => {
+        //     if(device.id === idDevice || device.id === idDevice) { 
+        //         return false;
+        //     }
+        //     return true;
+        // }))
     }
 
     const updateBoardWith = (dev) => {
@@ -178,7 +203,7 @@ function Board(props) {
             </div>
             {
                 selectedDevice &&
-                <Popup show={showDevicePopUp} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
+                <Popup show={showDevicePopUp} deleteDevice={deleteDevice} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
                 </Popup>
             }
         </div>

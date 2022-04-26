@@ -16,6 +16,12 @@ const Popup = (props) => {
         props.setSelectedDevice(null)
     }
 
+    const handleDelete = (event) => {
+        let a = window.confirm("Quer deletar o dispositivo " + device.name + device.id +"?");
+        if(a)
+            props.deleteDevice(device.id)
+    }
+
     const handleInputChange = (event) => {
         device[event.target.name] = event.target.value
         setDevice({ ...device })
@@ -37,11 +43,15 @@ const Popup = (props) => {
                             props.setShow(false);
                             props.setSelectedDevice(null)
                         }
-                    }> + </button>
+                    }> + </button>    
+                <form onSubmit={handleSubmit} >
                 {/* {React.cloneElement( */}
                     {components[props.device.type]}
                     {/* {  ...device, setDevice, handleSubmit, handleInputChange })} */}
 
+                    <input type="button" value="delete" onClick={handleDelete}/>
+                    <input type="submit" value="Aplicar" />
+                </form>
             </div>
         </div>
     ) : "";
