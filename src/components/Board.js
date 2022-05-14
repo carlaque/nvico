@@ -5,6 +5,7 @@ import Popup from './DeviceEditorPopUp.js';
 
 import Device from "./Device.js"
 import { ItemTypes, DevicesList } from './Constants'
+import { AddConnection, DeleteConnection } from './SetupConnection.js';
 
 
 function Board(props) {
@@ -12,6 +13,7 @@ function Board(props) {
 
     const [board, setBoard] = useState([])
     const [cable, setCable] = useState(false)
+    const [deletingConn, setDeletingConn] = useState(false)
     const [showDevicePopUp, setPopup] = useState(false)
     const [connections, setConnections] = useState(Array)
     const [selectedDevice, setSelectedDevice] = useState(null)
@@ -97,10 +99,8 @@ function Board(props) {
     const isConnectable = (device) => {
         // alert(connection.from != null && (connection.from.id !== device.id))
         let isUnderMax = (device.currentConnections < device.maxConnections)
-        // return (isUnderMax && connection.to  == null) || (connection.to  != null && (connection.to.id != device.to.id) )
-        // return isUnderMax &&  (connection.to != null && connection.to.id != device.to.id)
-        // return connection.from != null ? isUnderMax && (connection.from.id != device.id ): isUnderMax
-        return isUnderMax
+        return connection.from != null ? isUnderMax && (connection.from.id != device.id) : isUnderMax
+        // return isUnderMax
     }
 
     const parseRem = (x) => {
@@ -114,12 +114,12 @@ function Board(props) {
 
     const deleteDevice = (idDevice) => {
         setConnections(connections.filter((connection, index, array) => {
-            if(connection.to.id === idDevice || connection.from.id === idDevice) { 
+            if (connection.to.id === idDevice || connection.from.id === idDevice) {
                 return false;
             }
             return true;
         }))
-        let newBoard =  board
+        let newBoard = board
         delete newBoard[idDevice]
         setBoard(newBoard)
         setPopup(false)
@@ -141,10 +141,10 @@ function Board(props) {
             })
             let c = connections.forEach(
                 (connection) => {
-                    if(connection.to.id === dev.id) {
+                    if (connection.to.id === dev.id) {
                         connection.to = dev;
                     }
-                    else if(connection.from.id === dev.id) {
+                    else if (connection.from.id === dev.id) {
                         connection.from = dev;
                     }
                 }
@@ -152,13 +152,33 @@ function Board(props) {
         }
     }
 
+    const deleteConnection = (conn, connId) => {
+        let newConns = connections
+
+        console.log('antes', newConns)
+
+        board.forEach((dev) => {
+            if (conn.from.id === dev.id)
+                dev.currentConnections--
+            if (conn.to.id === dev.id)
+                dev.currentConnections--
+        })
+        
+        // delete newConns[connId]
+        newConns.splice(newConns[connId], 1)
+        setConnections([...newConns])
+        console.log(newConns)
+    }
+
     return (
-        <div className={cable? 'drawingArea mudaMouse': 'drawingArea'} >
+        <div className={cable ? 'drawingArea mudaMouse' : 'drawingArea'} >
             <div className='devicesBar'>
                 {devices.map((dev) => {
                     return <Device properties={dev} id={dev.id} />
                 })}
-                <button onClick={() => setCable(!cable)} className={cable? 'greenBtn' : 'redBtn'}>Criar Conexao</button>
+                <AddConnection cable={cable} setCable={setCable} />
+                <DeleteConnection deletingConn={deletingConn} setDeletingConn={setDeletingConn} />
+
                 <button onClick={() => console.log(board)}>Print Board</button>
                 <button onClick={() => console.log(connections)}>Print Connections</button>
             </div>
@@ -173,7 +193,11 @@ function Board(props) {
                             x2: conn.to.left,
                             y2: conn.to.top
                         }
-                        return <div style={{ position: 'absolute' }}>
+                        return <button
+                            style={{ all: 'unset', position: 'absolute' }}
+                            onClick={
+                                () => { deletingConn && deleteConnection(conn, key) }
+                            }>
                             <svg id={key} width={Math.max(line.x1, line.x2) + parseRem(4)} height={Math.max(line.y1, line.y2) + parseRem(4)}>
                                 <line x1={line.x1 + parseRem(-4)}
                                     y1={line.y1 + parseRem(4)}
@@ -184,7 +208,7 @@ function Board(props) {
                                     strokeWidth="3"
                                 />
                             </svg>
-                        </div>
+                        </button>
                     })
                 }
                 {

@@ -5,6 +5,7 @@ import { ItemTypes } from './Constants'
 import EndDevice from './EndDevice.js';
 import Router from './RouterDevice.js'
 import Switch from './SwitchDevice.js'
+import Cable from './SetupConnection.js'
 import Popup from './DeviceEditorPopUp';
 
 
