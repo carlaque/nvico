@@ -97,7 +97,6 @@ function Board(props) {
     }
 
     const isConnectable = (device) => {
-        // alert(connection.from != null && (connection.from.id !== device.id))
         let isUnderMax = (device.currentConnections < device.maxConnections)
         return connection.from != null ? isUnderMax && (connection.from.id != device.id) : isUnderMax
         // return isUnderMax
@@ -155,19 +154,12 @@ function Board(props) {
     const deleteConnection = (conn, connId) => {
         let newConns = connections
 
-        console.log('antes', newConns)
+        --board[conn.from.id].currentConnections
+        --board[conn.to.id].currentConnections
+        setBoard((board) => { return board })
 
-        board.forEach((dev) => {
-            if (conn.from.id === dev.id)
-                dev.currentConnections--
-            if (conn.to.id === dev.id)
-                dev.currentConnections--
-        })
-        
-        // delete newConns[connId]
         newConns.splice(newConns[connId], 1)
         setConnections([...newConns])
-        console.log(newConns)
     }
 
     return (
