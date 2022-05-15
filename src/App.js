@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles/styles.css"
+
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
+import Board from "./components/Board.js"
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" >
+      {/* <aside>
+        <h1>JSON AQUI</h1>
+        <textarea 
+        name="input" cols="60" rows="40" placeholder=" Digite aqui o JSON para gerar uma rede..."></textarea>
+        <button onClick={geraRede}>Gerar Rede</button>
+      </aside> */}
+      
+      <DndProvider backend={HTML5Backend}>
+        <Board />
+      </DndProvider>
+
     </div>
   );
 }
