@@ -107,6 +107,7 @@ function Board(props) {
     }
 
     const openDeviceEditor = (device) => {
+        console.log(device)
         setPopup(true)
         setSelectedDevice(device)
     }
@@ -164,16 +165,21 @@ function Board(props) {
 
     return (
         <div className={cable ? 'drawingArea mudaMouse' : 'drawingArea'} >
-            <div className='devicesBar'>
-                {devices.map((dev) => {
-                    return <Device properties={dev} id={dev.id} />
-                })}
-                <AddConnection cable={cable} setCable={setCable} />
-                <DeleteConnection deletingConn={deletingConn} setDeletingConn={setDeletingConn} />
+            <aside>
+                <div className="bar">
+                    {devices.map((dev) => {
+                        return <Device properties={dev} id={dev.id} />
+                    })}
+                </div>
+                <div className="bar">
+                    <AddConnection cable={cable} setCable={setCable} />
+                    <DeleteConnection deletingConn={deletingConn} setDeletingConn={setDeletingConn} />
+                    <button onClick={() => console.log(board)}>Print Board</button>
+                    <button onClick={() => console.log(connections)}>Print Connections</button>
+                </div>
 
-                <button onClick={() => console.log(board)}>Print Board</button>
-                <button onClick={() => console.log(connections)}>Print Connections</button>
-            </div>
+            </aside>
+
 
             <div ref={drop} className='board'>
                 {
@@ -219,7 +225,8 @@ function Board(props) {
             </div>
             {
                 selectedDevice &&
-                <Popup show={showDevicePopUp} deleteDevice={deleteDevice} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
+                <Popup
+                    show={showDevicePopUp} deleteDevice={deleteDevice} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
                 </Popup>
             }
         </div>
