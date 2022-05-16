@@ -6,6 +6,7 @@ import Popup from './DeviceEditorPopUp.js';
 import Device from "./Device.js"
 import { ItemTypes, DevicesList } from './Constants'
 import { AddConnection, DeleteConnection } from './SetupConnection.js';
+import ImportExportPopup from './ImportExportPopUp.js';
 
 
 function Board(props) {
@@ -15,6 +16,8 @@ function Board(props) {
     const [cable, setCable] = useState(false)
     const [deletingConn, setDeletingConn] = useState(false)
     const [showDevicePopUp, setPopup] = useState(false)
+    const [showImportExportPopUp, setImportExportPopup] = useState(false)
+    
     const [connections, setConnections] = useState(Array)
     const [selectedDevice, setSelectedDevice] = useState(null)
 
@@ -171,6 +174,7 @@ function Board(props) {
                 <AddConnection cable={cable} setCable={setCable} />
                 <DeleteConnection deletingConn={deletingConn} setDeletingConn={setDeletingConn} />
 
+                <button onClick={() => setImportExportPopup(true)}>export</button>
                 <button onClick={() => console.log(board)}>Print Board</button>
                 <button onClick={() => console.log(connections)}>Print Connections</button>
             </div>
@@ -221,6 +225,9 @@ function Board(props) {
                 selectedDevice &&
                 <Popup show={showDevicePopUp} deleteDevice={deleteDevice} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
                 </Popup>
+            }
+            {
+                <ImportExportPopup show={showImportExportPopUp} setBoard={setBoard} setConnections={setConnections} setShow={setImportExportPopup} connections={connections} board={board}></ImportExportPopup>
             }
         </div>
     );
