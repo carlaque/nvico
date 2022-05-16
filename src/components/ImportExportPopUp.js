@@ -15,6 +15,12 @@ const ImportExportPopup = (props) => {
 
     const importFromTextarea = () => {
         let object = JSON.parse(importObject);
+
+        object.connections.forEach(element => {
+            element.to = object.board[element.to.id];
+            element.from = object.board[element.from.id];
+        });
+
         props.setBoard(object.board);
         props.setConnections(object.connections);
     }
