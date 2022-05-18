@@ -226,7 +226,13 @@ function Board(props) {
             {
                 selectedDevice &&
                 <Popup
-                    show={showDevicePopUp} deleteDevice={deleteDevice} setShow={setPopup} device={selectedDevice} setSelectedDevice={setSelectedDevice} updateBoardWith={updateBoardWith}>
+                    show={showDevicePopUp}
+                    deleteDevice={deleteDevice}
+                    setShow={setPopup}
+                    device={selectedDevice}
+                    setSelectedDevice={setSelectedDevice}
+                    updateBoardWith={updateBoardWith}
+                    board={board}>
                 </Popup>
             }
         </div>

@@ -1,6 +1,18 @@
-export const EndDeviceEditorForm = ({ device, handleInputChange }) => {
-
+export const EndDeviceEditorForm = ({ device, handleInputChange, board }) => {
     // TODO colocar validacao dos campos de ip e mascara de acordo com flag isDHCP 
+    let ips = []
+    Object.entries(board)
+        .forEach(([key, dev]) => {
+            if (dev.type === "endDevice")
+                ips.push(dev.network.ip)
+        });
+
+    const validadeIp = (event) => {
+        let value = event.target.value
+        if (ips.filter((v) => v === value))
+            console.log('achou')
+    }
+
     return (
         <div className="form-edit">
             <label> Display Name: </label>
@@ -18,10 +30,10 @@ export const EndDeviceEditorForm = ({ device, handleInputChange }) => {
                     type="checkbox"
                     checked={device.network.isDHCP}
                     onChange={handleInputChange}
-                    name="isDHCP"
+                    name="network.isDHCP"
                 />
             </div>
-            
+
             <label> IP: </label>
             <input
                 type="text"
@@ -29,6 +41,7 @@ export const EndDeviceEditorForm = ({ device, handleInputChange }) => {
                 value={device.network.ip}
                 onChange={handleInputChange}
                 name="network.ip"
+                onBlur={validadeIp}
             />
             <label> Mascara: </label>
             <input
