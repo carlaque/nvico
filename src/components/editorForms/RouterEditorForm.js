@@ -16,6 +16,7 @@ export const RouterEditorForm = ({ device, handleInputChange }) => {
                     autoComplete="off"
                     value={device.maxConnections}
                     onChange={handleInputChange}
+                    min={device.currentConnections}
                     name="maxConnections"
                 />
         </div>
