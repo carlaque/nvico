@@ -90,8 +90,8 @@ aside {
   transform: rotate(45deg);
 }
 .conn-actions-button{
-  width: 7rem;
-  height: 7rem;
+  width: 5rem;
+  height: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
