@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDrop } from 'react-dnd';
 import Popup from './DeviceEditorPopUp.js';
 
+import { MdImportExport } from 'react-icons/md';
 
 import Device from "./Device.js"
 import { ItemTypes, DevicesList } from './Constants'
@@ -23,17 +24,28 @@ function Board(props) {
 
     let connection = { "from": null, "to": null }
 
-    let __uniqueIdentifier__ = 0;
+    // let __uniqueIdentifier__ = 0;
+    // let oldGetIdentifier = () => {
+    //     __uniqueIdentifier__++;
+    //     return __uniqueIdentifier__ - 1;
+    // }
     let getIdentifier = () => {
-        __uniqueIdentifier__++;
-        return __uniqueIdentifier__ - 1;
+        let max = -1;
+        board.forEach((device) => {
+            if (device.id > max) {
+                max = device.id;
+            }
+        })
+
+        return Math.max(0, max+1);
     }
 
     const moveDevice = useCallback(
         (id, left, top) => {
             setBoard((board) => {
-                board[id].left = left
-                board[id].top = top
+                let device = board.find(device => device && device.id === id)
+                device.left = left
+                device.top = top
                 return board
             })
         },
@@ -118,14 +130,28 @@ function Board(props) {
     const deleteDevice = (idDevice) => {
         setConnections(connections.filter((connection, index, array) => {
             if (connection.to.id === idDevice || connection.from.id === idDevice) {
+                board[connection.to.id].currentConnections = Math.max(0, board[connection.to.id].currentConnections-1);
+                board[connection.from.id].currentConnections = Math.max(0, board[connection.from.id].currentConnections-1);
                 return false;
             }
             return true;
         }))
-        let newBoard = board
-        delete newBoard[idDevice]
+        // let newBoard = board
+        // delete newBoard[idDevice]
+        let newBoard = board.filter((device, index, array) => device.id !== idDevice)
+        connections.forEach(
+            (connection) => {
+                if (connection.to.id === idDevice) {
+                    connection.to = newBoard.find(device => device.id === idDevice);
+                }
+                else if (connection.from.id === idDevice) {
+                    connection.from = newBoard.find(device => device.id === idDevice);
+                }
+            }
+        )
         setBoard(newBoard)
         setPopup(false)
+        setSelectedDevice(null)
         // setSelectedDevice(null)
         // console.log(board.filter((device, index, array) => {
         //     if(device.id === idDevice || device.id === idDevice) { 
@@ -175,11 +201,13 @@ function Board(props) {
                     })}
                 </div>
                 <div className="bar">
-                    <AddConnection cable={cable} setCable={setCable} />
-                    <DeleteConnection deletingConn={deletingConn} setDeletingConn={setDeletingConn} />
-                    <button onClick={() => setImportExportPopup(true)}>export</button>
-                    <button onClick={() => console.log(board)}>Print Board</button>
-                    <button onClick={() => console.log(connections)}>Print Connections</button>
+                    <AddConnection cable={cable} setCable={(a)=>{setCable(a);setDeletingConn(false)}} />
+                    <DeleteConnection deletingConn={deletingConn} setDeletingConn={(a)=>{setDeletingConn(a); setCable(false)}} />
+                    <button className={'conn-actions-button'} onClick={() => setImportExportPopup(true)}>
+                        <MdImportExport style={{width: '60%',height: '60%'}}/>Import/Export
+                    </button>
+                    {/* <button onClick={() => console.log(board)}>Print Board</button> */}
+                    {/* <button onClick={() => console.log(connections)}>Print Connections</button> */}
                 </div>
 
             </aside>

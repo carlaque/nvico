@@ -53,7 +53,7 @@ const Popup = (props) => {
         switch: <SwitchEditorForm device={{ ...device }} handleInputChange={handleInputChange} />
     }
 
-    return props.show ? (
+    return props.show ? 
         <div className="popup">
             <div className="popup-inner">
                 <h1>Edit Device</h1>
@@ -70,7 +70,7 @@ const Popup = (props) => {
                 </form>
             </div>
         </div>
-    ) : "";
+    : <></>;
 }
 
 export default Popup;
