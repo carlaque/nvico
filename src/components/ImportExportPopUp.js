@@ -13,6 +13,27 @@ const ImportExportPopup = (props) => {
         navigator.clipboard.writeText(textBox.value);
     }
 
+    const downloadJson = () => {
+        const element = document.createElement("a");
+        let jsonText = document.getElementById("exportTextarea").value;
+
+        const blob = new Blob([jsonText]);
+
+        element.href = URL.createObjectURL(blob);
+
+        let currentdate = new Date(); 
+        let datetime = currentdate.getDate() + "-"
+                + (currentdate.getMonth()+1)  + "-" 
+                + currentdate.getFullYear() + "."  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+
+        element.download = `nvico-${datetime}.json`;
+        document.body.appendChild(element);
+        element.click();
+    }
+
     const importFromTextarea = () => {
         let object = JSON.parse(importObject);
 
@@ -44,6 +65,7 @@ const ImportExportPopup = (props) => {
                         <label>Export</label><br/>
                         <textarea id='exportTextarea' style={{width: '100%', height: '300px'}} value={getExportData()}></textarea>
                         <button onClick={copyToClipboard}>copy</button>
+                        <button onClick={downloadJson}>download</button>
                     </div>
                     <div>
                         <label>Import</label><br/>
