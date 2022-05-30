@@ -6,7 +6,6 @@ const ImportExportPopup = (props) => {
     document.onkeydown = (e) => {
         if (e.key === "Escape") {
             props.setShow(false);
-            props.setSelectedDevice(null)
         }
     }
 
