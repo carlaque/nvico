@@ -88,6 +88,7 @@ aside {
   background: none;
   cursor: pointer;
   transform: rotate(45deg);
+  font-size: 2rem;
 }
 .conn-actions-button{
   width: 5rem;
