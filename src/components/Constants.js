@@ -26,7 +26,7 @@ export const DevicesList = [
     "isConst": true,
     "type": "switch",
     "name": "Switch",
-    "maxConnections": 2,
+    "maxConnections": 4,
     "currentConnections": 0,
   }
 ]
