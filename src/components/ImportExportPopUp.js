@@ -84,7 +84,7 @@ const ImportExportPopup = (props) => {
                 <div>
                     <div>
                         <h1>Export</h1>
-                        <textarea id='exportTextarea' style={{ width: '100%', height: '300px' }} value={getExportData()}></textarea>
+                        <textarea id='exportTextarea' style={{ width: '100%', height: '200px' }} value={getExportData()}></textarea>
                         <div className="buttons">
                             <button onClick={copyToClipboard}>Copiar</button>
                             <button onClick={downloadJson}>Download</button>
@@ -92,7 +92,7 @@ const ImportExportPopup = (props) => {
                     </div>
                     <div>
                         <h1>Import</h1>
-                        <textarea style={{ width: '100%', height: '300px' }} value={importObject} onChange={handleImportTextarea}></textarea>
+                        <textarea style={{ width: '100%', height: '200px' }} value={importObject} onChange={handleImportTextarea}></textarea>
 
                         <div className="buttons">
                             <button onClick={importFromTextarea}>Importar</button>
